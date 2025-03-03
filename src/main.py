@@ -1,6 +1,6 @@
 from textnode import TextNode, TextType
 
-from htmlnode import HTMLNode
+from htmlnode import HTMLNode, LeafNode, ParentNode
 def main():
     node = TextNode("This is a text node", TextType.BOLD, "https://www.boot.dev")
     print(node)
@@ -11,6 +11,18 @@ def main():
                 }
     html_node = HTMLNode("p", "A normal text", None, prop)
     print(html_node)
+
+    node = ParentNode(
+    "p",
+    [
+        LeafNode("b", "Bold text"),
+        LeafNode(None, "Normal text"),
+        LeafNode("i", "italic text"),
+        LeafNode(None, "Normal text"),
+    ],
+    )
+
+    print(node.to_html())
 
 
 main()
