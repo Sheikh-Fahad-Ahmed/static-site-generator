@@ -35,7 +35,8 @@ def split_nodes_image(old_nodes):
             text_list = []
             for image in image_list:
                 text_list = new_text.split(f"![{image[0]}]({image[1]})", 1)
-                split_node_list.append(TextNode(text_list[0], TextType.TEXT))
+                if text_list[0] != '':
+                    split_node_list.append(TextNode(text_list[0], TextType.TEXT))
                 split_node_list.append(TextNode(image[0], TextType.IMAGE, image[1]))
                 new_text = text_list[1]
             if new_text:
@@ -55,7 +56,8 @@ def split_nodes_link(old_nodes):
             text_list = []
             for link in link_list:
                 text_list = new_text.split(f"[{link[0]}]({link[1]})", 1)
-                split_nodes_list.append(TextNode(text_list[0], TextType.TEXT))
+                if text_list[0] != '':
+                    split_nodes_list.append(TextNode(text_list[0], TextType.TEXT))
                 split_nodes_list.append(TextNode(link[0], TextType.LINK, link[1]))
                 new_text = text_list[1]
             if new_text:
@@ -69,10 +71,11 @@ def split_nodes_link(old_nodes):
 
 
 node = TextNode(
-    "This is text with an [image](https://i.imgur.com/zjjcJKZ.png) and another [second image](https://i.imgur.com/3elNhQu.png) is the last",
+    "![image](https://i.imgur.com/zjjcJKZ.png)",
     TextType.TEXT,
 )
 
+print(split_nodes_image([node]))
 
 
 
