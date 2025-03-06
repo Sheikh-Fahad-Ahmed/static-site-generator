@@ -23,6 +23,7 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
             new_nodes.extend(split_node_list)
         else:
             new_nodes.append(node)
+            continue
     return new_nodes
 
 def split_nodes_image(old_nodes):
@@ -70,12 +71,7 @@ def split_nodes_link(old_nodes):
 
 
 
-node = TextNode(
-    "![image](https://i.imgur.com/zjjcJKZ.png)",
-    TextType.TEXT,
-)
 
-print(split_nodes_image([node]))
 
 
 
