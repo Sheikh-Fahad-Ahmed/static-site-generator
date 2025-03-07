@@ -61,7 +61,7 @@ def markdown_to_html_node(markdown):
         block_type = block_to_block_type(block)
         if block_type == BlockType.ORDERED_LIST or block_type == BlockType.UNORDERED_LIST:
             list_nodes = get_html_node_from_list(block, block_type)
-            parent_node.children.extend(list_nodes)
+            parent_node.children.append(list_nodes)
         else:
             tag, value = extract_tag_value_from_block(block, block_type)
             if tag == 'code':
@@ -122,7 +122,7 @@ def extract_tag_value_from_block(block, block_type):
     if block_type == BlockType.QUOTE:
         lines = block.split("\n")
         lines = [line[2:] if line.startswith("> ") else line[1:] if line.startswith(">") else line for line in lines]
-        quote_text = "\n".join(lines)
+        quote_text = " ".join(lines)
         return "blockquote", quote_text
     
 def text_to_children(text):
