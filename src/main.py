@@ -1,28 +1,35 @@
-from textnode import TextNode, TextType
+import os
+import shutil
 
-from htmlnode import HTMLNode, LeafNode, ParentNode
+from copy_static_to_public import copy_files_recursive
+from generate_page import generate_page, generate_page_recursively
+
+dir_path_static = "./static"
+dir_path_public = "./public"
+dir_path_content = "./content"
+template_path = "./template.html"
+
+
 def main():
-    node = TextNode("This is a text node", TextType.BOLD, "https://www.boot.dev")
-    print(node)
+    print("Deleting public directory...")
+    if os.path.exists(dir_path_public):
+        shutil.rmtree(dir_path_public)
 
-    prop = {
-                "href": "https://www.google.com",
-                "target": "_blank",
-                }
-    html_node = HTMLNode("p", "A normal text", None, prop)
-    print(html_node)
+    print("Copying static files to public directory...")
+    copy_files_recursive(dir_path_static, dir_path_public)
 
-    node = ParentNode(
-    "p",
-    [
-        LeafNode("b", "Bold text"),
-        LeafNode(None, "Normal text"),
-        LeafNode("i", "italic text"),
-        LeafNode(None, "Normal text"),
-    ],
+    print("Generating page...")
+    generate_page_recursively(
+        dir_path_content,
+        template_path,
+        dir_path_public
     )
-
-    print(node.to_html())
 
 
 main()
+
+
+
+
+
+

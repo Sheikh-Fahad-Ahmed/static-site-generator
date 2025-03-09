@@ -11,8 +11,9 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
         split_node_list = []
         if node.text_type == TextType.TEXT:
             text_list = node.text.split(delimiter)
-            if len(text_list) % 2 == 0:
-                raise ValueError("invalid markdown, formatted section not closed")
+            
+            if delimiter in node.text and len(text_list) % 2 == 0:
+                raise ValueError("Invalid markdown, formatted section not closed properly")
             for i in range(len(text_list)):
                 if text_list[i] == "":
                     continue
@@ -54,13 +55,15 @@ def split_nodes_link(old_nodes):
         if node.text_type == TextType.TEXT:
             new_text = node.text
             link_list = extract_markdown_links(node.text)
-            text_list = []
             for link in link_list:
-                text_list = new_text.split(f"[{link[0]}]({link[1]})", 1)
-                if text_list[0] != '':
-                    split_nodes_list.append(TextNode(text_list[0], TextType.TEXT))
-                split_nodes_list.append(TextNode(link[0], TextType.LINK, link[1]))
-                new_text = text_list[1]
+                parts = new_text.split(f"[{link[0]}]({link[1]})", 1)
+                if len(parts) == 2:
+                    if parts[0].strip():
+                        split_nodes_list.append(TextNode(parts[0], TextType.TEXT))
+                    split_nodes_list.append(TextNode(link[0], TextType.LINK, link[1]))
+                    new_text = parts[1].strip()  # Update remaining text
+                else:
+                    new_text = parts[0].strip()
             if new_text:
                 split_nodes_list.append(TextNode(new_text, TextType.TEXT))
             new_nodes.extend(split_nodes_list)
